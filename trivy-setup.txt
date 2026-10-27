@@ -1,0 +1,13 @@
+sudo apt-get update
+sudo apt-get install -y curl
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+  | sudo sh -s -- -b /usr/local/bin
+
+trivy --version
+trivy --help
+
+trivy image --severity HIGH,CRITICAL nginx:latest
+
+trivy config ./deployment.yaml
+
+trivy k8s --report summary cluster
