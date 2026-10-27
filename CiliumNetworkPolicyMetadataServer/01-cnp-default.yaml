@@ -1,0 +1,31 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default
+  namespace: metadata-access
+spec:
+  endpointSelector: {}
+
+  egress:
+    # 1. Allow egress to 0.0.0.0/0
+    - toCIDR:
+        - 0.0.0.0/0
+
+    # 2. Allow egress to endpoints in the same namespace
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": metadata-access
+
+    # 3. Allow egress to endpoints in kube-system (including DNS)
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": kube-system
+
+  egressDeny:
+    # 4. Deny access to the metadata service
+    - toCIDR:
+        - 192.168.100.21/32
+      toPorts:
+        - ports:
+            - port: "9055"
+              protocol: TCP

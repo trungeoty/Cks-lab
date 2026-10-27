@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gateway-v1-egress
+  namespace: team-ivy-gateway
+spec:
+  podSelector:
+    matchLabels:
+      app: gateway-v1
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: team-ivy-private
+      ports:
+        - protocol: TCP
+          port: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gateway-v2-egress
+  namespace: team-ivy-gateway
+spec:
+  podSelector:
+    matchLabels:
+      app: gateway-v2
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: team-ivy-private
+      ports:
+        - protocol: TCP
+          port: 4000
+        - protocol: TCP
+          port: 5000

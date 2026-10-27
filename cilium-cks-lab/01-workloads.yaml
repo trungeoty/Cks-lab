@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmitter
+  namespace: team-iris
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmitter
+      type: messenger
+  template:
+    metadata:
+      labels:
+        app: transmitter
+        type: messenger
+    spec:
+      containers:
+        - name: app
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep 36000"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messenger
+  namespace: team-iris
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messenger
+      type: messenger
+  template:
+    metadata:
+      labels:
+        app: messenger
+        type: messenger
+    spec:
+      containers:
+        - name: app
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep 36000"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  namespace: team-iris
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+      type: database
+  template:
+    metadata:
+      labels:
+        app: database
+        type: database
+    spec:
+      containers:
+        - name: app
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep 36000"]

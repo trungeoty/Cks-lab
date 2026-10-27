@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: p2
+  namespace: team-iris
+spec:
+  endpointSelector:
+    matchLabels:
+      app: transmitter
+  egressDeny:
+    - toEndpoints:
+        - matchLabels:
+            type: database
+      toPorts:
+        - icmps:
+            - fields:
+                - type: EchoRequest
+                  family: IPv4
