@@ -1,0 +1,33 @@
+# Assumes the default Istio ingress gateway service is installed.
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: lab-gateway
+  namespace: istio-lab
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "lab.example.com"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: frontend-route
+  namespace: istio-lab
+spec:
+  hosts:
+  - "lab.example.com"
+  gateways:
+  - lab-gateway
+  http:
+  - route:
+    - destination:
+        host: frontend.istio-lab.svc.cluster.local
+        port:
+          number: 80

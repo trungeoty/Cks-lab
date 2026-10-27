@@ -1,0 +1,11 @@
+# Kubernetes NetworkPolicy example. Requires a CNI that enforces NetworkPolicy.
+# This denies ingress to pods in istio-isolation except traffic explicitly allowed.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: istio-isolation
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress

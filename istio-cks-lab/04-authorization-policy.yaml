@@ -1,0 +1,16 @@
+# Allow only workloads labelled app=secure-client to call secure-server.
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-secure-client
+  namespace: istio-secure
+spec:
+  selector:
+    matchLabels:
+      app: secure-server
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+        - cluster.local/ns/istio-secure/sa/default
