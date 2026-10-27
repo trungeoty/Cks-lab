@@ -1,0 +1,26 @@
+go install sigs.k8s.io/bom/cmd/bom@latest
+
+export PATH="$(go env GOPATH)/bin:$PATH"
+
+bom version
+bom --help
+
+
+######################################
+curl -fL https://github.com/kubernetes-sigs/bom/releases/latest/download/bom-amd64-linux -o bom
+
+chmod +x bom
+sudo install -m 755 bom /usr/local/bin/bom
+
+OR 
+
+sudo mv bom /usr/local/bin/bom
+
+bom version
+
+
+
+curl -fL https://github.com/kubernetes-sigs/bom/releases/download/v0.8.0/bom-amd64-linux -o bom
+
+chmod +x bom
+sudo install -m 755 bom /usr/local/bin/bom
