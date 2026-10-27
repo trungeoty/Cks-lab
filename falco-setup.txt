@@ -1,0 +1,45 @@
+# 1. Kiểm tra môi trường
+kubectl get nodes
+helm version
+
+# 2. Thêm Helm repository chính thức
+helm repo add falcosecurity https://falcosecurity.github.io/charts
+helm repo update
+
+# 3. Cài Falco
+helm install --replace falco \
+  --namespace falco \
+  --create-namespace \
+  --set tty=true \
+  falcosecurity/falco
+
+# 4. Theo dõi Pod
+kubectl get pods -n falco -o wide
+kubectl wait pods --for=condition=Ready --all -n falco --timeout=180s
+
+kubectl get daemonset -n falco
+kubectl get pods -n falco
+kubectl logs -n falco -l app.kubernetes.io/name=falco -c falco --tail=100
+
+kubectl describe pods -n falco
+kubectl logs -n falco -l app.kubernetes.io/name=falco -c falco
+
+
+##################################################################
+# Cài công cụ cần thiết
+sudo apt-get update
+sudo apt-get install -y curl gnupg
+
+# Thêm GPG key chính thức
+curl -fsSL https://falco.org/repo/falcosecurity-packages.asc \
+  | sudo gpg --dearmor --yes \
+      -o /usr/share/keyrings/falco-archive-keyring.gpg
+
+# Thêm repository
+echo "deb [signed-by=/usr/share/keyrings/falco-archive-keyring.gpg] https://download.falco.org/packages/deb stable main" \
+  | sudo tee /etc/apt/sources.list.d/falcosecurity.list
+
+# Cập nhật và cài Falco
+sudo apt-get update
+sudo apt-get install -y dialog
+sudo apt-get install -y falco
